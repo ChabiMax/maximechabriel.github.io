@@ -1,0 +1,5 @@
+\babel@toc {english}{}\relax 
+\beamer@sectionintoc {1}{Representing a distribution}{3}{0}{1}
+\beamer@sectionintoc {2}{Statistics}{18}{0}{2}
+\beamer@sectionintoc {3}{Choosing a statistic}{29}{0}{3}
+\beamer@sectionintoc {4}{Comparing the distribution of variables}{36}{0}{4}

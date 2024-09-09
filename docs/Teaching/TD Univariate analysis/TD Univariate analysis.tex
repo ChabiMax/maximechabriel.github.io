@@ -1,0 +1,188 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\def\author{Maxime Chabriel} \def\instit{ENS de Lyon/CERGIC} \def\email{maxime.chabriel@proton.me}
+
+\begin{document}
+	\par\noindent\rule{\textwidth}{1pt}
+	\begin{minipage}[c]{.32\linewidth}
+		\vspace{0.5cm}
+		\small{ \author \\
+			\instit \\
+			\href{mailto:\email}{\email} \\
+		}
+	\end{minipage}
+	\begin{minipage}[c]{.33\linewidth}
+		\begin{center}
+			\large{\textbf{Introduction to Quantitative Methods}} \\
+			\normalsize{Directed Work \\ Univariate Analysis}
+		\end{center}
+	\end{minipage}
+	\begin{minipage}[c]{.32\linewidth}
+		\raggedleft
+		\small{ Fall 2024 \\
+			Master EEI \\
+		}
+	\end{minipage}
+	\par\noindent\rule{\textwidth}{1pt}
+	
+	\section*{Objectives}
+
+    The objectives of this session are:
+    \begin{itemize}
+        \item To learn the basics of Excel
+        \item To review what we saw in Univariate analysis clas
+        \item To learn how to implement the analysis we saw in class using Excel
+        \item To develop good practices when it comes to handling datasets
+    \end{itemize}
+    Follow the instructions. I remain available if you have any question. But remember, computering is learned by searching your answers by yourself. Also, you live in the era of ChatGPT, this may the only class in all your studies where you will be incited to use it! You can work alone or in groups of 2. At the end of this session or before next class, send me your completed Excel file and your answers in a Word document in an email entitled "DW1 NAME1 NAME2".
+
+    \section*{Opening the dataset}
+
+    We will be using a dataset containing country-level indicators of development.
+    \begin{itemize}
+		\item Download the country development database
+		\item Open the data with Excel
+		\begin{itemize}
+			\item \textbf{NB} a database is usually stored in the CSV (Comma Separated Values) format
+			\item If this is the case (and the data is not stored in a typical Excel .xls/.xlsx format), click right on the file $\rightarrow$ Open with $\rightarrow$ Excel
+			\item If the data appears mashed up in a single column, it means the separator of the CSV is not well defined
+			\begin{itemize}
+				\item Select the column
+				\item Go to Data $\rightarrow$ Convert
+				\item Select delimiter $\rightarrow$ Next
+				\item Select either tabulation, comma or semi-column, depending on what works
+				\item Click finish
+			\end{itemize}
+		\end{itemize}
+		\item Check the column names, the number of observations, are they coherent?
+	\end{itemize}
+	In our case, the database is pretty big, let's create a subset. A dataset is \textit{too big} depending on the software you use (R is much more powerful than Excel for instance), the stats of your computer and how much you are getting confused by uncessary parasite data.
+	\begin{itemize}
+		\item Create a new Sheet. Rename both sheets (right click) \textit{Data} and \textit{Data subset}
+		\item Go back to your original Sheet
+		\item Create a filter
+		\begin{itemize}
+			\item Select everything (Ctrl+A)
+			\item Clik Data $\rightarrow$ Filter
+		\end{itemize}
+		\item We only want to keep the year 2015: Select the Year column $\rightarrow$ Unselect everything $\rightarrow$ Select 2015. Do not worry, we will be dealing with panel data later in this class
+		\item Copy everything and paste it to the \textit{Data subset} sheet. NB Copying your original data is a good practice as it prevents you from accidentally corrupting your original data. R has built-in saveguards, but in Excel Ctr+Z will not always save you...
+		\item Save your Excel file: File $\rightarrow$ Save as. Create a new dedicated folder. Choose your folders wisely! A data folder can very quickly become messy if you do not pay attention when you save your files.
+	\end{itemize}
+    Now let's check if our dataset is clean.
+    \begin{itemize}
+        \item In the data subset we just built, what are the observations?
+        \item Is there a specific column that uniquely identifies the observations?
+        \item How many observations are there? Select the identifier column, on the bottom right appears the number of non-empty cells selected
+        \item How many variables are there? Take a look, do you think they are relevant to study the development of countries? Do you wish other variables were available?
+        \item Now let's check if there are missing values
+        \begin{itemize}
+            \item Does the number of observations in the dataset checks out?
+            \item Without creating any new cells, count the number of missing values in the GDP variable. Is there a reason that may explain why the data is missing? Do you think the missing data comes from our end? From the collection procedure of the data? Or from the source of the data? 
+            \item Just by looking at your data, you may notice a column is full of missing values. Go to your original dataset and filter for other years than 2015. Is the column still empty?
+            \item It seems like this column will not be any use for us today. Go back to your subset and delete the column (right click on its title). One down!
+            \item Select the column \textit{Government expenditure on education (\% of GDP)} (you can find elements in the Excel using Ctrl+F). How many missing values are there? Implement a filter on the table, just like we did on the original dataset, and filter out the non-missing values. Look at the observations, is there any logic to the missing values? Do you think the observations with non-missing values constitute a representative sample of your population? If not, delete it!
+            \item The year is not much use either, delete it
+        \end{itemize}
+        \item Are the remaining variables all relevant to compare countries' development? Let's go other them one by one and discuss their relevance. Delete the unrelevant columns
+    \end{itemize}
+
+    \section*{Exploring the dataset}
+
+    Unfilter your subset. We will now try to create a small overview of the dataset. There are still many variables, and it can be quite overwhelming when you look at them. Let's try using what we learned in class to quickly summarise them.
+    \begin{itemize}
+        \item Go to the last line of your dataset. You can quickly do so by clicking any cell of the identifier column, then Ctrl + bottom arrow
+        \item The column titles are out of your view, this is cumbersome. Go back to the top (Ctrl + top arrow) and click on the cell B2. Click on Display $\rightarrow$ Freeze the panels. Wherever you go in your sheet, you will always see your id and variable names!
+        \item Skip a line under the last country and write Mean
+        \item Now in the same line and in the column GDP, you will write your first Excel formula
+        \begin{itemize}
+            \item A formula always begins with the "=" sign
+            \item You then type a function. Here it is the function MEAN( . ). If your function is in French, it will be MOYENNE( . ). Then type the range of the data whose mean you want to compute. The easy way is to drag your mouse on the GDP values
+            \item Excel is smart, you do not need to type the formula for each column. Once you have typed the formula, drag the bottom right corner along the line. It will carry forward the function to the folowing columns
+        \end{itemize}
+        \item What is the average country population? The average GPD PPP per capita?
+        \item How do you interpret the mean of the last column?
+        \item 	Now below the Mean and for each column, compute:
+        \begin{itemize}
+            \item The median
+            \item The variance
+            \item The standard deviation
+            \item The first quartile
+            \item The third quartile
+            \item The 10th centile
+            \item The 90th centile
+            \item The smallest value
+            \item The biggest value
+            \item The interdecile ratio
+            \item The number of missing values
+            \item The share of countries with a value above the mean
+        \end{itemize}
+        \item Before we continue, cleanup time! Put your titles in bold. Put boxes around the cells. 
+        \item What is the variable the least equitably shared amongst countries?
+        \begin{itemize}
+            \item No need to squint your eyes over your numbers, use formulas again!
+            \item In the cell S197 type "Extreme value"
+            \item Then under it type a formula that detects for each \textit{relevant}
+            statistic the value indicating the distribution with the highest spread
+            \begin{itemize}
+                \item NB You can only compare statistics that are not dependent of distribution scale. If you divide/multiply all your variables by 10, does it change your statistic? If yes, then this means it is scale dependent
+                \item For some you might want to find the highest values. For others, the lowest
+            \end{itemize}
+            \item For instance, for Variance, type "= MAXIMUM(the line of your variance results)"
+            \item You can get the name of the column using the following formula (I did not invent it, ChatGPT found it for me): "=INDEX(\$E\$1:\$Q\$1, EQUIV(T199, E199:Q199, 0))"
+        \end{itemize}
+    \end{itemize}
+
+    \section*{Plotting data}
+
+    Now let's explore one of the variables in details. We will first look at the GPD PPP per capita. Create a new sheet and copy the identifier column along with the variable of interest. Rename the sheet. Let's begin with a categorical variable.
+    \begin{itemize}
+        \item Create a new column entitled "Income level"
+        \item For each observation, compute the income level. Find the formula using ChatGPT. In 2015 we had:
+        \begin{itemize}
+            \item 0-1045\$ is lower income
+            \item 1046-4125\$ is lower middle income
+            \item 4126\$-12745\$ is upper middle income
+            \item 12746\$-above is upper income
+        \end{itemize}
+        \item Build a pie chart representing the share of each income share in the total number of countries. To do so, select the data column, click on Insert $\rightarrow$ Pie plot
+        \begin{itemize}
+            \item Add a title
+            \item Show the labels
+            \item Add notes on the graph showing the precise number of each share
+        \end{itemize}
+        \item Do a bar plot (do not confuse with a histogram!). Make it clean
+        \item Precisely, what type of variable is the income level? Check that the bars are in the right order
+    \end{itemize}
+    Now let's study a quantitative variable:
+    \begin{itemize}
+        \item Create the histogram of the GPP PPP per capita
+        \item Change the bin size to 2000\$. To do so, double click on the x axis. On the appearing panel on the right, select Axis option $\rightarrow$ Interval size
+        \item Are you satisfied by the readability of your graph? What seems to be the issue?
+        \item Let's delete some outliers. Copy the GDP PPP per capita to a new column, sort the data from big to small and delete the 10 biggest observations. Replot the histogram using this new column
+        \item Clean the histogram. Precise in the title that you deleted the 10 biggest outliers
+        \item Assume that the histogram represents a density. Describe it
+        \item Now let's plot a graph to summarise the distribution of your data (spoiler: it's a boxplot)
+    \end{itemize}
+    Now let's compare the distribution of some variables.
+    \begin{itemize}
+        \item Select the GDP PPP per capita and Access to electricity variables. Create a boxplot. Are you satisfied by this graph? What seems to be the issue?
+        \item Let's rescale and center the variable. Scaling is when you change the unit of a variable. Centering is when you change the mean of the variable to 0.
+        \begin{itemize}
+            \item To do so, let's create new variables. Skip a column and copy paste the variable names.
+            \item In the first cell (let's call it Y) of your first variable, create a formula so that the matching cell (let's call it X) in the original variable is substracted its mean, and is divided by its standard deviation. You want: $Y = (X - E(X)) / \sigma(X)$
+            \item Spread your formula to all the other cells
+        \end{itemize}
+    \item Now replot the box plots. Clean the plots
+    \begin{itemize}
+        \item Which distribution has the most outliers (as detected by Excel)?
+        \item Which distribution is the most unevenly distributed? the most evenly distributed?
+    \end{itemize} 
+    \end{itemize}
+\end{document}
+
+
